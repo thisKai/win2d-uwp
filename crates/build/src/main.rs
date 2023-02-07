@@ -24,7 +24,7 @@ fn main() {
 
     let output = output.join("lib.rs");
     let mut file = std::fs::File::create(&output).unwrap();
-    file.write_all(b"mod Microsoft;\n").unwrap();
+    file.write_all(b"pub mod Microsoft;\n").unwrap();
 
     let output = output_crate_dir.join("Cargo.toml");
     let mut file = std::fs::File::create(&output).unwrap();
