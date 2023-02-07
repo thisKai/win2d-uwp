@@ -1,0 +1,35 @@
+[package]
+name = "win2d-uwp"
+version = "0.44.0"
+authors = ["Microsoft"]
+edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Rust for Windows"
+repository = "https://github.com/microsoft/windows-rs"
+documentation = "https://microsoft.github.io/windows-docs-rs/"
+readme = "../../../docs/readme.md"
+rust-version = "1.48"
+categories = ["os::windows-apis"]
+
+[package.metadata.docs.rs]
+default-target = "x86_64-pc-windows-msvc"
+targets = []
+rustc-args = ["--cfg", "docsrs"]
+
+[dependencies.windows]
+version = "0.44"
+
+[features]
+default = []
+deprecated = []
+implement = ["windows/implement"]
+Graphics = []
+Graphics_Canvas = ["Graphics"]
+Graphics_Canvas_Brushes = ["Graphics_Canvas"]
+Graphics_Canvas_Effects = ["Graphics_Canvas"]
+Graphics_Canvas_Geometry = ["Graphics_Canvas"]
+Graphics_Canvas_Printing = ["Graphics_Canvas"]
+Graphics_Canvas_Svg = ["Graphics_Canvas"]
+Graphics_Canvas_Text = ["Graphics_Canvas"]
+Graphics_Canvas_UI = ["Graphics_Canvas"]
+Graphics_Canvas_UI_Composition = ["Graphics_Canvas_UI"]
