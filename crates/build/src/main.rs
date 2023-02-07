@@ -1,7 +1,7 @@
 mod util;
 
 use rayon::prelude::*;
-use std::{io::prelude::*, path::Path};
+use std::{collections::HashSet, io::prelude::*, path::Path};
 
 fn main() {
     let crate_dir = Path::new(std::env!("CARGO_MANIFEST_DIR"));
@@ -70,6 +70,18 @@ implement = ["windows/implement"]
                 .unwrap();
         }
     }
+
+    file.write_all(b"# windows crate\n").unwrap();
+
+    let mut windows_deps: Vec<_> = get_windows_crate_deps(reader, &trees).into_iter().collect();
+    windows_deps.sort();
+    for namespace in windows_deps.into_iter() {
+        let feature = namespace.replace(".", "_");
+        let windows_crate_feature = &feature["Windows_".len()..];
+
+        file.write_all(format!("{feature} = [\"windows/{windows_crate_feature}\"]\n").as_bytes())
+            .unwrap();
+    }
 }
 
 fn gen_tree(
@@ -93,4 +105,42 @@ fn gen_tree(
     let mut tokens = bindgen::namespace_impl(&gen, tree);
     util::format(tree.namespace, &mut tokens, rustfmt);
     std::fs::write(path.join("impl.rs"), tokens).unwrap();
+}
+
+fn get_windows_crate_deps<'a>(
+    reader: &'a metadata::reader::Reader,
+    trees: &'a Vec<&'a metadata::reader::Tree>,
+) -> HashSet<&'a str> {
+    let mut windows_deps = HashSet::new();
+
+    for tree in trees.iter().skip(1) {
+        for ty in reader.namespace_types(tree.namespace) {
+            let fields = reader.type_def_fields(ty);
+
+            for field in fields {
+                let sig_cfg = reader.field_cfg(field);
+
+                for (namespace, _) in sig_cfg.types {
+                    if namespace.starts_with("Windows.") {
+                        windows_deps.insert(namespace);
+                    }
+                }
+            }
+
+            let methods = reader.type_def_methods(ty);
+
+            for method in methods {
+                let sig = reader.method_def_signature(method, &[]);
+                let sig_cfg = reader.signature_cfg(&sig);
+
+                for (namespace, _) in sig_cfg.types {
+                    if namespace.starts_with("Windows.") {
+                        windows_deps.insert(namespace);
+                    }
+                }
+            }
+        }
+    }
+
+    windows_deps
 }
