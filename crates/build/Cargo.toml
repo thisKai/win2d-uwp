@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+metadata = { package = "windows-metadata", version = "0.44" }
+bindgen = { package = "windows-bindgen", version = "0.44" }
+rayon = "1"
+prettyplease = "0.1"
+syn = "1.0"
