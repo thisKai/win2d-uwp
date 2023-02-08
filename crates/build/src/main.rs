@@ -1,5 +1,7 @@
+mod nuget;
 mod util;
 
+use nuget::download_win2d_dependencies;
 use rayon::prelude::*;
 use std::{collections::HashSet, io::prelude::*, path::Path};
 
@@ -7,6 +9,8 @@ fn main() {
     let crate_dir = Path::new(std::env!("CARGO_MANIFEST_DIR"));
     let winmd = crate_dir.join(r#".windows\winmd\Microsoft.Graphics.Canvas.winmd"#);
     let output_crate_dir = crate_dir.parent().unwrap().join("win2d-uwp");
+
+    download_win2d_dependencies(&output_crate_dir);
 
     let output = output_crate_dir.join("src");
 
