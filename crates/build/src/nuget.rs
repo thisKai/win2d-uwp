@@ -1,17 +1,17 @@
 use bytes::Bytes;
 use std::{
     fs::{create_dir_all, File},
-    io::{self, Cursor},
+    io::{self, Cursor, Read},
     path::Path,
 };
 use zip::ZipArchive;
 
-pub fn download_win2d_dependencies(output_dir: &Path) {
+pub fn download_dependencies_and_get_metadata(output_dir: &Path) -> Vec<u8> {
     let output_dir = output_dir.join(".windows");
 
     download_vrct_forwarders_package(&output_dir);
 
-    download_win2d_uwp_package(&output_dir);
+    download_win2d_uwp_package_get_metadata(&output_dir)
 }
 
 fn download_vrct_forwarders_package(output_dir: &Path) {
@@ -44,7 +44,7 @@ fn download_vrct_forwarders_package(output_dir: &Path) {
     }
 }
 
-fn download_win2d_uwp_package(output_dir: &Path) {
+fn download_win2d_uwp_package_get_metadata(output_dir: &Path) -> Vec<u8> {
     let mut package = download_nuget_package("Win2D.uwp", "1.26.0");
 
     for index in 0..package.len() {
@@ -63,6 +63,14 @@ fn download_win2d_uwp_package(output_dir: &Path) {
             io::copy(&mut file, &mut output_file).unwrap();
         }
     }
+
+    let mut metadata_file = package
+        .by_name("lib/uap10.0/Microsoft.Graphics.Canvas.winmd")
+        .unwrap();
+    let mut metadata_buf = Vec::new();
+    metadata_file.read_to_end(&mut metadata_buf).unwrap();
+
+    metadata_buf
 }
 
 fn dll_output_file(arch: &str, file_name: &str, output_dir: &Path) -> io::Result<File> {

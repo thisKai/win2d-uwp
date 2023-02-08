@@ -1,20 +1,29 @@
 mod nuget;
 mod util;
 
-use nuget::download_win2d_dependencies;
+use nuget::download_dependencies_and_get_metadata;
 use rayon::prelude::*;
 use std::{collections::HashSet, io::prelude::*, path::Path};
 
 fn main() {
     let crate_dir = Path::new(std::env!("CARGO_MANIFEST_DIR"));
-    let winmd = crate_dir.join(r#".windows\winmd\Microsoft.Graphics.Canvas.winmd"#);
     let output_crate_dir = crate_dir.parent().unwrap().join("win2d-uwp");
 
-    download_win2d_dependencies(&output_crate_dir);
+    let metadata_buf = download_dependencies_and_get_metadata(&output_crate_dir);
 
     let output = output_crate_dir.join("src");
 
-    let files = metadata::reader::File::with_default(&[winmd.to_str().unwrap()]).unwrap();
+    let files = {
+        let mut files = metadata::reader::File::with_default(&[]).unwrap();
+        files.push(
+            metadata::reader::File::from_buffer(
+                metadata_buf,
+                String::from("Microsoft.Graphics.Canvas.winmd"),
+            )
+            .unwrap(),
+        );
+        files
+    };
     let reader = &metadata::reader::Reader::new(&files);
 
     let root = reader
