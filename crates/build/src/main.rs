@@ -83,8 +83,10 @@ implement = ["windows/implement"]
         let feature = namespace.replace(".", "_");
         let windows_crate_feature = &feature["Windows_".len()..];
 
-        file.write_all(format!("{feature} = [\"windows/{windows_crate_feature}\"]\n").as_bytes())
-            .unwrap();
+        file.write_all(
+            format!("{windows_crate_feature} = [\"windows/{windows_crate_feature}\"]\n").as_bytes(),
+        )
+        .unwrap();
     }
 }
 
