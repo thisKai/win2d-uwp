@@ -1,2 +1,9 @@
 [workspace]
 members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Microsoft"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/thisKai/win2d-uwp"
+description = "Win2D (UWP version) for rust"

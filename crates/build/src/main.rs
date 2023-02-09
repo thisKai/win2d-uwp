@@ -45,13 +45,12 @@ fn main() {
     file.write_all(
         r#"[package]
 name = "win2d-uwp"
-version = "0.44.0"
-authors = ["Microsoft"]
+version.workspace = true
+authors.workspace = true
 edition = "2018"
-license = "MIT OR Apache-2.0"
-description = "Rust for Windows"
-repository = "https://github.com/microsoft/windows-rs"
-documentation = "https://microsoft.github.io/windows-docs-rs/"
+license.workspace = true
+description.workspace = true
+repository.workspace = true
 readme = "../../../docs/readme.md"
 rust-version = "1.48"
 categories = ["os::windows-apis"]

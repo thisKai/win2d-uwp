@@ -1,7 +1,11 @@
 [package]
 name = "win2d-build"
-version = "0.1.0"
+version.workspace = true
+authors.workspace = true
 edition = "2021"
+license.workspace = true
+description = "Code generator for win2d-uwp crate"
+repository.workspace = true
 
 [dependencies]
 metadata = { package = "windows-metadata", version = "0.44" }
