@@ -22,7 +22,6 @@ use windows::{
         Effects::IGraphicsEffectSource,
     },
     Storage::Streams::{DataWriter, InMemoryRandomAccessStream},
-    Win32::System::WinRT::{RoInitialize, RO_INIT_SINGLETHREADED},
     UI::{
         Color, Colors,
         Composition::{CompositionEffectSourceParameter, CompositionStretch, Compositor},
@@ -36,10 +35,6 @@ use winit::{
 };
 
 fn main() -> windows::core::Result<()> {
-    unsafe {
-        RoInitialize(RO_INIT_SINGLETHREADED)?;
-    }
-
     let _controller = create_dispatcher_queue_controller_for_current_thread()?;
 
     let event_loop = EventLoop::new();
