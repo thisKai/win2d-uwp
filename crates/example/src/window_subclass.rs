@@ -1,17 +1,15 @@
-use {
-    raw_window_handle::{HasRawWindowHandle, RawWindowHandle},
-    windows::Win32::{
-        Foundation::{BOOL, HWND, LPARAM, LRESULT, RECT, TRUE, WPARAM},
-        Graphics::Dwm::{DwmDefWindowProc, DwmExtendFrameIntoClientArea, DwmIsCompositionEnabled},
-        UI::{
-            Controls::MARGINS,
-            Shell::{DefSubclassProc, SetWindowSubclass},
-            WindowsAndMessaging::{
-                AdjustWindowRectEx, GetWindowRect, SetWindowPos, HTBOTTOM, HTBOTTOMLEFT,
-                HTBOTTOMRIGHT, HTCAPTION, HTLEFT, HTNOWHERE, HTRIGHT, HTTOP, HTTOPLEFT, HTTOPRIGHT,
-                NCCALCSIZE_PARAMS, SWP_FRAMECHANGED, WINDOW_EX_STYLE, WM_ACTIVATE, WM_CREATE,
-                WM_NCCALCSIZE, WM_NCHITTEST, WS_CAPTION, WS_OVERLAPPEDWINDOW,
-            },
+use raw_window_handle::{HasRawWindowHandle, RawWindowHandle};
+use windows::Win32::{
+    Foundation::{BOOL, HWND, LPARAM, LRESULT, RECT, TRUE, WPARAM},
+    Graphics::Dwm::{DwmDefWindowProc, DwmExtendFrameIntoClientArea, DwmIsCompositionEnabled},
+    UI::{
+        Controls::MARGINS,
+        Shell::{DefSubclassProc, SetWindowSubclass},
+        WindowsAndMessaging::{
+            AdjustWindowRectEx, GetWindowRect, SetWindowPos, HTBOTTOM, HTBOTTOMLEFT, HTBOTTOMRIGHT,
+            HTCAPTION, HTLEFT, HTNOWHERE, HTRIGHT, HTTOP, HTTOPLEFT, HTTOPRIGHT, NCCALCSIZE_PARAMS,
+            SWP_FRAMECHANGED, WINDOW_EX_STYLE, WM_ACTIVATE, WM_CREATE, WM_NCCALCSIZE, WM_NCHITTEST,
+            WS_CAPTION, WS_OVERLAPPEDWINDOW,
         },
     },
 };
