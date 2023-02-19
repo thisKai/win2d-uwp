@@ -14,14 +14,11 @@ const ARCH: &str = "arm64";
 fn main() {
     let dlls = PathBuf::from_iter([env!("CARGO_MANIFEST_DIR"), ".windows", ARCH]);
 
-    println!(
-        "cargo:rustc-link-search=native={}",
-        std::env::var("OUT_DIR").unwrap(),
-    );
+    let out_dir = PathBuf::from(std::env::var_os("OUT_DIR").unwrap());
+    let target_dir = out_dir.ancestors().skip(3).next().unwrap();
 
     for entry in read_dir(dlls).unwrap().filter_map(Result::ok) {
-        let output_path =
-            PathBuf::from_iter([std::env::var_os("OUT_DIR").unwrap(), entry.file_name()]);
+        let output_path = target_dir.join(entry.file_name());
 
         copy(entry.path(), output_path).unwrap();
     }
